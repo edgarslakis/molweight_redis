@@ -8,8 +8,7 @@ r = redis.Redis(
   decode_responses=True)
 
 
-# Datu bāzē ievieto vismaz 500 ierakstus no faila
-csvdata = []
+# Datu bāzē ievieto vismaz 500 ierakstus no CSV faila
 with open("dataset.csv", "r") as file:
     reader = csv.reader(file, delimiter=";")
     for line in reader:
@@ -28,7 +27,8 @@ with open("dataset.csv", "r") as file:
         cool_rows = [row[0] for idx, row in enumerate(reader) if (idx > 100) & (idx < 121)]
         for row in cool_rows:
             r.get(row)
-print(r.dbsize())
+
+print("Datubāzes izmērs pirms 20 ierakstu dzēšanas: ", r.dbsize())
 # Dzēš 20 ierakstus
 with open("dataset.csv", "r") as file:
         reader = csv.reader(file, delimiter=";")
@@ -36,4 +36,4 @@ with open("dataset.csv", "r") as file:
         for row in boring_rows:
             r.delete(row)
 
-print(r.dbsize())
+print("Datubāzes izmērs pēc 20 ierakstu dzēšanas: ", r.dbsize())
