@@ -1,5 +1,6 @@
 import redis
 import csv
+import time
 
 r = redis.Redis(
   host='redis-14151.c304.europe-west1-2.gce.cloud.redislabs.com',
@@ -35,5 +36,15 @@ with open("dataset.csv", "r") as file:
         boring_rows = [row[0] for idx, row in enumerate(reader) if (idx > 200) & (idx < 221)]
         for row in boring_rows:
             r.delete(row)
-
 print("Datubāzes izmērs pēc 20 ierakstu dzēšanas: ", r.dbsize())
+
+print("Atslēgas, kuras satur patern 'CU...': ", r.keys("CU*"))
+
+r.expire("CUL2", 10)
+
+time.sleep(5)
+print("CUL2 vērtība pēc 5 sekundēm: ", r.get("CUL2"))
+
+time.sleep(7)
+print("CUL2 vērtība pēc 12 sekundēm: ", r.get("CUL2"))
+print("Atslēgas, kuras satur patern 'CU...': ", r.keys("CU*"))
