@@ -9,9 +9,8 @@ r = redis.Redis(
   decode_responses=True)
 
 
-# Datu bāzē ievieto vismaz 500 ierakstus no CSV faila
+# Datu bāzē pa vienam ievieto vismaz 500 ierakstus no CSV faila
 with open("dataset.csv", "r", encoding="utf-8") as file:
-    print(file)
     reader = csv.reader(file, delimiter=";")
     for line in reader:
         r.set(line[0],line[1])
